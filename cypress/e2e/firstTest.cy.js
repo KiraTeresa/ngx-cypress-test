@@ -1,113 +1,43 @@
-//describe() or context() can be used, for the beginning of the code
-
-/*
-******************************************
-* Basic test structure:
-******************************************
-*/
 describe("Our first suite", () => {
-// tests go in here:
 
   it("first test", () => {
-  // test code goes in here
+
+    cy.visit('/')
+    cy.contains('Forms').click()
+    cy.contains('Form Layouts').click()
+
+    // by tag name
+    cy.get('input')
+
+    // by id
+    cy.get("#inputEmail1")
+
+    // by class name
+    cy.get('.input-full-width')
+
+    // by attribute name
+    cy.get('[placeholder]')
+
+    // by attribute name and value
+    cy.get('[placeholder="Email"]')
+
+    // by class value
+    cy.get('[class="input-full-width size-medium shape-rectangle"]')
+
+    // by tag name and attribute with value
+    cy.get('input[placeholder="Email"]')
+
+    // by two different attributes
+    cy.get('[placeholder="Email"][type="email"]')
+
+    // by tag name, attribute with value, id and class name
+    cy.get('input[placeholder="Email"]#inputEmail1.input-full-width')
+
+    // the most recommended way by cypress
+    cy.get('[data-cy="imputEmail1"]')
+
   })
 
-  it("second test", () => {
-  // test code goes in here
-  })
-
-  it("third test", () => {
-  // test code goes in here
-  })
 })
 
 
-/*
-******************************************
-* Nesting multiple section is possible:
-******************************************
-*/
-describe("Our second suite", () => {
-// tests go in here:
-
-  describe("Our first suite section", () => {
-  // tests go in here:
-
-    it("first test", () => {
-    // test code goes in here
-    })
-
-    it("second test", () => {
-    // test code goes in here
-    })
-
-    it("third test", () => {
-    // test code goes in here
-    })
-  })
-
-  describe("Our second suite section", () => {
-  // tests go in here:
-
-    it("first test", () => {
-    // test code goes in here
-    })
-
-    it("second test", () => {
-    // test code goes in here
-    })
-
-    it("third test", () => {
-    // test code goes in here
-    })
-  })
-})
-
-
-/*
-******************************************
-* Repetitive code (Tests which have to always run before some other tests)
-* can be put inside a beforeEach():
-******************************************
-*/
-describe("Our third suite", () => {
-// tests go in here:
-
-  describe("Our first suite section", () => {
-
-    beforeEach("code for every test", () => {
-      // repetitive test code goes here
-      // this will be run before every test of the same suite section
-    })
-
-    // tests go in here:
-
-    it("first test", () => {
-      // test code goes in here
-    })
-
-    it("second test", () => {
-      // test code goes in here
-    })
-
-    it("third test", () => {
-      // test code goes in here
-    })
-  })
-
-  describe("Our second suite section", () => {
-    // tests go in here:
-
-    it("first test", () => {
-      // test code goes in here
-    })
-
-    it("second test", () => {
-      // test code goes in here
-    })
-
-    it("third test", () => {
-      // test code goes in here
-    })
-  })
-})
