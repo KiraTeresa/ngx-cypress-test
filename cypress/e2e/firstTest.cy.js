@@ -1,9 +1,9 @@
 //describe() or context() can be used, for the beginning of the code
 
 /*
-************************************
+******************************************
 * Basic test structure:
-************************************
+******************************************
 */
 describe("Our first suite", () => {
 // tests go in here:
@@ -23,9 +23,9 @@ describe("Our first suite", () => {
 
 
 /*
-************************************
+******************************************
 * Nesting multiple section is possible:
-************************************
+******************************************
 */
 describe("Our second suite", () => {
 // tests go in here:
@@ -65,10 +65,10 @@ describe("Our second suite", () => {
 
 
 /*
-************************************
+******************************************
 * Repetitive code (Tests which have to always run before some other tests)
 * can be put inside a beforeEach():
-************************************
+******************************************
 */
 describe("Our third suite", () => {
 // tests go in here:
