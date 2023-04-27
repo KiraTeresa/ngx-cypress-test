@@ -59,7 +59,7 @@ describe("Our first suite", () => {
     cy.contains('Sign in')
 
     // adding a unique identifier
-    cy.contains('[status="warning"]','Sign in')
+    cy.contains('[status="warning"]', 'Sign in')
 
     // find sign in button through another element of the same component by "travelling up"
     // find is used, to find the child element within a parent element, therefore a parent command must be run first
@@ -74,7 +74,7 @@ describe("Our first suite", () => {
 
     // find the element "nb-card", which contains "Horizontal form"
     // within this element, find the one with the attribute "type", whos value is "email"
-    cy.contains('nb-card','Horizontal form').find('[type="email"]')
+    cy.contains('nb-card', 'Horizontal form').find('[type="email"]')
 
   })
 
@@ -148,7 +148,7 @@ describe("Our first suite", () => {
       })
   })
 
-  it.only('assert property', () => {
+  it('assert property', () => {
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Datepicker').click()
@@ -158,6 +158,49 @@ describe("Our first suite", () => {
       cy.get('nb-calendar-day-picker').contains('17').click()
       cy.wrap(input).invoke('prop', 'value').should('contain', 'Apr 17, 2023')
     })
+  })
+
+  /*
+  **********************************
+  * Lesson 26: Checkboxes and Radio Buttons
+  **********************************
+  */
+  it.only('radio button', () => {
+    cy.visit('/')
+    cy.contains('Forms').click()
+    cy.contains('Form Layouts').click()
+
+    cy.contains('nb-card', 'Using the Grid')
+      .find('[type="radio"]').then(radioButtons => {
+      cy.wrap(radioButtons)
+        .first()
+        .check({force: true}) // force needed, because elements visibility is hidden
+        .should('be.checked')
+
+      cy.wrap(radioButtons)
+        .eq(1)
+        .check({force: true})
+
+      cy.wrap(radioButtons)
+        .first()
+        .should('not.be.checked')
+
+      cy.wrap(radioButtons)
+        .eq(2)
+        .should('be.disabled')
+
+    })
+  })
+
+  it.only('check boxes', () => {
+    cy.visit('/')
+    cy.contains('Modal & Overlays').click()
+    cy.contains('Toastr').click()
+
+    // cy.get('[type="checkbox"]').check({force: true})
+    // if box is already checked, the check() command will not uncheck it, but it will check all the boxes, which haven't been checked yet
+    // to uncheck a checkbox, use click() command
+    cy.get('[type="checkbox"]').eq(0).click({force: true})
   })
 })
 
