@@ -1,5 +1,10 @@
 describe("Our first suite", () => {
 
+  /*
+  **********************************
+  * Lesson 22: Types of Locators
+  **********************************
+  */
   it("first test", () => {
 
     cy.visit('/')
@@ -38,7 +43,12 @@ describe("Our first suite", () => {
 
   })
 
-  it.only('second test', () => {
+  /*
+**********************************
+* Lesson 23: Finding Web Elements
+**********************************
+*/
+  it('second test', () => {
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Form Layouts').click()
@@ -68,6 +78,42 @@ describe("Our first suite", () => {
 
   })
 
+
+  /*
+**********************************
+* Lesson 24: Saving Subject of the Command
+**********************************
+*/
+  it.only("then and wrap methods", () => {
+    cy.visit('/')
+    cy.contains('Forms').click()
+    cy.contains('Form Layouts').click()
+
+    cy.contains('nb-card', 'Using the Grid').find('[for="inputEmail1"]').should('contain', 'Email')
+    cy.contains('nb-card', 'Using the Grid').find('[for="inputPassword2"]').should('contain', 'Password')
+
+    cy.contains('nb-card', 'Basic form').find('[for="exampleInputEmail1"]').should('contain', 'Email')
+    cy.contains('nb-card', 'Basic form').find('[for="exampleInputPassword1"]').should('contain', 'Password')
+
+    // calling .then(), it's parameter becomes jquery syntax
+    // this is why we can save it and use later
+    // saving cypress syntax is not possible, because its async
+    cy.contains('nb-card', 'Using the Grid').then(firstForm => {
+      const emailLabelFirst = firstForm.find('[for="inputEmail1"]').text()
+      const passwordLabelFirst = firstForm.find('[for="inputPassword2"]').text()
+      expect(emailLabelFirst).to.equal('Email')
+      expect(passwordLabelFirst).to.equal('Password')
+
+      cy.contains('nb-card', 'Basic form').then(secondForm => {
+        const passwordSecondText = secondForm.find('[for="exampleInputPassword1"]').text()
+        expect(passwordLabelFirst).to.equal(passwordSecondText)
+
+        // use wrap() to convert jquery back to cypress syntax
+        cy.wrap(secondForm).find('[for="exampleInputPassword1"]').should('contain', 'Password')
+      })
+    })
+
+  })
 })
 
 
