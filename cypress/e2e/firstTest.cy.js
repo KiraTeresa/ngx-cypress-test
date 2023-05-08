@@ -285,7 +285,7 @@ describe("Our first suite", () => {
   * Lesson 29: Web Tables
   **********************************
   */
-  it.only('web tables', () => {
+  it('web tables', () => {
     cy.visit('/')
     cy.contains('Tables & Data').click()
     cy.contains('Smart Table').click()
@@ -324,6 +324,59 @@ describe("Our first suite", () => {
         }
       })
     })
+
+  })
+
+  /*
+  **********************************
+  * Lesson 30: PopUps and ToolTips
+  **********************************
+  */
+  it('tootltip', () => {
+    cy.visit('/')
+    cy.contains('Modal & Overlays').click()
+    cy.contains('Tooltip').click()
+
+    cy.get('button').contains('Default').click()
+    cy.get('nb-tooltip').contains('This is a tooltip')
+  })
+
+  it('dialog box', () => {
+    cy.visit('/')
+    cy.contains('Tables & Data').click()
+    cy.contains('Smart Table').click()
+
+    // 1 (not recommended, because if window:confirm never gets fired, the following code will never be executed)
+    cy.get('tbody tr').first().find('.nb-trash').click()
+    cy.on('window:confirm', (confirm) => {
+      expect(confirm).to.equal('Are you sure you want to delete?')
+    })
+
+    // 2 (better approach, because if window:confirm does not get fired, the stub will be empty, therefore there won't be an element on the stub (getCall(0)), thus not getting the correct confirm message will make the test fail)
+    const stub = cy.stub()
+    cy.on('window:confirm', stub)
+    cy.get('tbody tr').first().find('.nb-trash').click().then(() => {
+      expect(stub.getCall(0)).to.be.calledWith('Are you sure you want to delete?')
+    })
+
+    // 3: select cancel
+    cy.get('tbody tr').first().find('.nb-trash').click()
+    cy.on('window:confirm', () => false)
+  })
+
+  it.only('popup', () => {
+    cy.visit('/')
+    cy.contains('Modal & Overlays').click()
+    cy.contains('Dialog').click()
+
+    cy.get('nb-card').contains('Open Dialog').parent().find('button').contains('Open Dialog with component').click()
+
+    cy.get('.cdk-overlay-container ngx-showcase-dialog').find('nb-card').then(card => {
+      cy.wrap(card).contains('nb-card-header', 'This is a title passed to the dialog component')
+      cy.wrap(card).get('nb-card-footer button').click()
+    })
+
+    cy.get('.cdk-overlay-container').should('contain', '')
 
   })
 })
