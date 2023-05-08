@@ -364,7 +364,7 @@ describe("Our first suite", () => {
     cy.on('window:confirm', () => false)
   })
 
-  it.only('popup', () => {
+  it('popup', () => {
     cy.visit('/')
     cy.contains('Modal & Overlays').click()
     cy.contains('Dialog').click()
@@ -376,8 +376,63 @@ describe("Our first suite", () => {
       cy.wrap(card).get('nb-card-footer button').click()
     })
 
-    cy.get('.cdk-overlay-container').should('contain', '')
+    cy.get('.cdk-overlay-container').should('be.empty')
 
+  })
+
+  /*
+  **********************************
+  * Lesson 31: Cypress Assertions
+  **********************************
+  */
+  it.only('assertions', () => {
+    cy.visit('/')
+    cy.contains('Forms').click()
+    cy.contains('Form Layouts').click()
+
+    // 1
+    cy.get('[for="exampleInputEmail1"]')
+      .should('contain', 'Email address')
+      .should('have.class', 'label')
+      .and('have.text', 'Email address')
+
+    // 2
+    cy.get('[for="exampleInputEmail1"]').then(label => {
+      expect(label.text()).to.equal('Email address')
+      expect(label).to.have.class('label')
+      expect(label).to.have.text('Email address')
+    })
+
+    function selectDayFromCurrent(day){
+
+      let date = new Date()
+      // get current day, add two days, bring back into date format
+      date.setDate(date.getDate() + day)
+      let futureDay = date.getDate()
+      let futureMonth = date.toLocaleString('en-US', {month: 'short'})
+      let dateAssert = futureMonth+' '+futureDay+', '+date.getFullYear()
+
+      cy.get('nb-calendar-navigation').invoke('attr', 'ng-reflect-date').then(dateAttribute => {
+        if(!dateAttribute.includes(futureMonth)){
+          cy.get('[data-name="chevron-right"]').click()
+          selectDayFromCurrent(day) // will create a while-loop
+        } else {
+          cy.get('nb-calendar-day-picker [class="day-cell ng-star-inserted"]').contains(futureDay).click()
+        }
+      })
+      return dateAssert
+    }
+
+    cy.visit('/')
+    cy.contains('Forms').click()
+    cy.contains('Datepicker').click()
+
+    cy.contains('nb-card', 'Common Datepicker').find('input').then(input => {
+      cy.wrap(input).click()
+      let dateAssert = selectDayFromCurrent(3)
+      cy.wrap(input).invoke('prop', 'value').should('contain', dateAssert)
+      cy.wrap(input).should('have.value', dateAssert)
+    })
   })
 })
 
