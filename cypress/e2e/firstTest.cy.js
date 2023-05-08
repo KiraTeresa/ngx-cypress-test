@@ -385,7 +385,7 @@ describe("Our first suite", () => {
   * Lesson 31: Cypress Assertions
   **********************************
   */
-  it.only('assertions', () => {
+  it('assertions', () => {
     cy.visit('/')
     cy.contains('Forms').click()
     cy.contains('Form Layouts').click()
