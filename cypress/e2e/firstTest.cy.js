@@ -247,7 +247,7 @@ describe("Our first suite", () => {
   * Lesson 28: Lists and Dropdowns
   **********************************
   */
-  it.only('check boxes', () => {
+  it('check boxes', () => {
     cy.visit('/')
 
     // 1
@@ -278,6 +278,53 @@ describe("Our first suite", () => {
         }
       })
     })
+  })
+
+  /*
+  **********************************
+  * Lesson 29: Web Tables
+  **********************************
+  */
+  it.only('web tables', () => {
+    cy.visit('/')
+    cy.contains('Tables & Data').click()
+    cy.contains('Smart Table').click()
+
+    // 1: change the value of an input field
+    cy.get('tbody').contains('tr', 'Larry').then(tableRow => {
+      cy.wrap(tableRow).find('.nb-edit').click()
+      cy.wrap(tableRow).find('[ng-reflect-name="age"]').clear().type('25')
+      cy.wrap(tableRow).find('.nb-checkmark').click()
+      cy.wrap(tableRow).find('td').eq(6).should('contain', '25')
+    })
+
+    // 2: add a new value
+    cy.get('thead').find('.nb-plus').click()
+    cy.get('thead').find('[ng2-st-thead-form-row]').then(tableRow => {
+      cy.wrap(tableRow).find('[placeholder="First Name"]').type('Artem')
+      cy.wrap(tableRow).find('[placeholder="Last Name"]').type('Bondar')
+      cy.wrap(tableRow).find('.nb-checkmark').click()
+    })
+    cy.get('tbody tr').eq(0).find('td').then(tableData => {
+      cy.wrap(tableData).eq(2).should('contain', 'Artem')
+      cy.wrap(tableData).eq(3).should('contain', 'Bondar')
+    })
+
+    // 3: filter
+    const ages = [20, 30, 40, 200]
+
+    cy.wrap(ages).each(age => {
+      cy.get('thead [placeholder="Age"]').clear().type(age)
+      cy.wait(500) // waiting 0.5 sec
+      cy.get('tbody tr').each(tableRow => {
+        if(age == 200){
+          cy.wrap(tableRow).find('td').should('contain', 'No data found')
+        } else {
+          cy.wrap(tableRow).find('td').eq(6).should('contain', age)
+        }
+      })
+    })
+
   })
 })
 
