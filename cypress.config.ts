@@ -1,6 +1,7 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
+  projectId: 'w343s1',
   viewportHeight: 1080,
   viewportWidth: 1920,
   experimentalWebKitSupport: true,

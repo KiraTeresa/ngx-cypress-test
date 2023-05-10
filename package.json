@@ -29,7 +29,8 @@
     "docs:serve": "compodoc -p src/tsconfig.app.json -d docs -s",
     "prepush": "npm run lint:ci",
     "release:changelog": "npm run conventional-changelog -- -p angular -i CHANGELOG.md -s",
-    "cy:run_spec": "npx cypress run --spec 'cypress/e2e/testWithPageObjects.js' --browser webkit --headed"
+    "cy:run_spec": "npx cypress run --spec 'cypress/e2e/testWithPageObjects.js' --headless --record --key envCypressDashboardKey",
+    "cy:run_browser": "npm run cy:run_spec -- --browser chrome --group Chrome --ci-build-id 1 & npm run cy:run_spec -- --browser edge --group Edge --ci-build-id 1"
   },
   "dependencies": {
     "@agm/core": "^1.1.0",
