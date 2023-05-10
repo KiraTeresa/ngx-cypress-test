@@ -42,3 +42,6 @@ Thumbs.db
 
 # env
 .env
+
+# image snapshots
+/cypress/e2e/__image_snapshots__
